@@ -11,21 +11,32 @@ public:
         std::cin >> population;
         std::cout << "Введите военную мощь (=<2):";
         std::cin >> millitarypow;
+        std::cout << "Введите настроение в гос-ве(<1 - плохое):";
+        std::cin >> mood;
     }
-    void Init(std::string a, int b, float c) {
+    void Init(std::string a, int b, float c, float d) {
         title = a;
         population = b;
         millitarypow = c;
+        mood = d;
     }
-    void surrend() {
-        std::cout << "Государство " << title << " сдалось" << endl;
-        surrender = true;
+    bool surrend() {
+        std::cout << "Государство " << this->title << " сдалось" << endl;
+        bool sur = true;
+        return &sur;
     };
+    friend void CheckMood(nation a) {
+        if (a.mood < 1) {
+            std::cout << "\nВ государстве " << a.title << " слишком плохое настроение, произошел бунт" << endl;
+            a.surrender = true;
+        }
+    }
     void endwar() {
         score = population * millitarypow;
     };
     std::string title;
     int population;
+    float mood;
     float score;
     float millitarypow;
     bool surrender = false;
@@ -44,6 +55,12 @@ public:
         std::cout << "Популяция - " << population << endl;
         std::cout << "Военная мощь - " << millitarypow << endl;
         std::cout << "Тип государства - Дружелюбное" << endl;
+        if(mood>1)
+            std::cout << "Настроение - хорошее" << endl;
+        else
+            std::cout << "Настроение - плохое" << endl;
+
+
     };
 };
 
@@ -59,6 +76,10 @@ public:
         std::cout << "Популяция - " << population << endl;
         std::cout << "Военная мощь - " << millitarypow << endl;
         std::cout << "Тип государства - Военное" << endl;
+        if (mood > 1)
+            std::cout << "Настроение - хорошее" << endl;
+        else
+            std::cout << "Настроение - плохое" << endl;
     };
 };
 
@@ -68,7 +89,7 @@ int main()
     peacefull* one = new peacefull();
     enemy* two = new enemy();
     one->Read();
-    two->Init("Rome", 11000, 1.1);
+    two->Init("Rome", 11000, 1.1, 1.5);
     one->Display();
     two->Display();
     std::cout << "***********Начало войны***********" << endl;
@@ -82,7 +103,7 @@ int main()
         if (num == 49) break;
     } while (1);
     if (num == 49) {
-        one->surrend();
+        one->surrender = one->surrend();
     }
     //*****
     std::cout << "\nГосударство " << two->title << " вы хотите сдаться? (1-да 2-нет)";
@@ -107,6 +128,8 @@ int main()
     if (one->surrender == false && two->surrender == false) {
         one->devpopulation();
         two->devmilitar();
+        CheckMood(*one);
+        CheckMood(*two);
         one->endwar();
         two->endwar();
         if (one->score > two->score) {
