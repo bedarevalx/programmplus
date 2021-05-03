@@ -25,6 +25,12 @@ public:
         bool sur = true;
         return &sur;
     };
+    static int counter;
+    static void discounter() {
+        std::cout << "В войне участвует " << counter << " государств" << endl;
+        std::cout << "***********Начало войны***********" << endl;
+        std::cout << "\nУ государств еще есть возможность этого избежать, если\n одно из государств сдастся";
+    }
     friend void CheckMood(nation a) {
         if (a.mood < 1) {
             std::cout << "\nВ государстве " << a.title << " слишком плохое настроение, произошел бунт" << endl;
@@ -82,18 +88,19 @@ public:
             std::cout << "Настроение - плохое" << endl;
     };
 };
-
+    int nation::counter = 0;
 int main()
 {
     setlocale(LC_ALL, "RUS");
     peacefull* one = new peacefull();
     enemy* two = new enemy();
     one->Read();
+    nation::counter++;
     two->Init("Rome", 11000, 1.1, 1.5);
+    nation::counter++;
     one->Display();
     two->Display();
-    std::cout << "***********Начало войны***********" << endl;
-    std::cout << "\nУ государств еще есть возможность этого избежать, если\n одно из государств сдастся";
+    nation::discounter();
     //**********
     std::cout << "\nГосударство " << one->title << " вы хотите сдаться? (1-да 2-нет)";
     int num;
