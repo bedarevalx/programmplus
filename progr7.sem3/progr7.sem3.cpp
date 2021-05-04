@@ -14,12 +14,6 @@ public:
         std::cout << "Введите настроение в гос-ве(<1 - плохое):";
         std::cin >> mood;
     }
-    void Init(std::string a, int b, float c, float d) {
-        title = a;
-        population = b;
-        millitarypow = c;
-        mood = d;
-    }
     bool surrend() {
         std::cout << "Государство " << this->title << " сдалось" << endl;
         bool sur = true;
@@ -37,6 +31,13 @@ public:
             a.surrender = true;
         }
     }
+    nation(std::string name, int populate, float milit,float moodk)
+    {
+        this->title = name;
+        this->population = populate;
+        this->millitarypow = milit;
+        this->mood = moodk;
+    }
     void endwar() {
         score = population * millitarypow;
     };
@@ -51,6 +52,10 @@ public:
 
 class peacefull : public nation {
 public:
+    peacefull(std::string name, int popul, float milit, float moodkk)
+        :nation(name, popul, milit, moodkk) {
+        nation::counter++;
+    };
     void devpopulation() {
         std::cout << "\nУ государства " << title << " выросла популяция, военная сила уменьшена";
         population *= 1.5;
@@ -66,12 +71,19 @@ public:
         else
             std::cout << "Настроение - плохое" << endl;
 
-
     };
 };
 
 class enemy : public nation {
 public:
+    enemy(std::string name, int popul, float milit, float moodkk)
+        :nation(name, popul, milit, moodkk) {
+        nation::counter++;
+    };
+    enemy()
+        :nation("Rome", 11000, 1.5, 1) {
+        nation::counter++;
+    };
     void devmilitar() {
         std::cout << "\nУ государства " << title << " увеличилась военная мощь, популяция уменьшена";
         millitarypow += 1;
@@ -92,12 +104,8 @@ public:
 int main()
 {
     setlocale(LC_ALL, "RUS");
-    peacefull* one = new peacefull();
+    peacefull* one = new peacefull("Greece",11000,1.5,1);
     enemy* two = new enemy();
-    one->Read();
-    nation::counter++;
-    two->Init("Rome", 11000, 1.1, 1.5);
-    nation::counter++;
     one->Display();
     two->Display();
     nation::discounter();
