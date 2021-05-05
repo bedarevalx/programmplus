@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <string>
+#include <ctype.h>
 using namespace std;
 
 class nation {
@@ -100,11 +101,35 @@ public:
             std::cout << "Настроение - плохое" << endl;
     };
 };
+
+std::string instring() {
+    int p=0;
+    std::string titlein;
+    int size;
+    while (p == 0) {
+        p = 1;
+        std::cout << "\nВведите название государства: ";
+        std::cin >> titlein;
+        size = titlein.size();
+        try {
+            for (int i = 0; i < size; i++) {
+                if (isdigit(titlein[i])) throw titlein;
+            }
+        }
+        catch(std::string str){
+            std::cout << "\nВведенная вами строка " << str << " некорректна, повторите ввод" << endl;
+            p = 0;
+        }
+    }
+    return titlein;
+
+}
     int nation::counter = 0;
 int main()
 {
     setlocale(LC_ALL, "RUS");
-    peacefull* one = new peacefull("Greece",11000,1.5,1);
+    peacefull* one = new peacefull(instring(),100000,1.5,1);
+    std::string titlein;
     enemy* two = new enemy();
     one->Display();
     two->Display();
